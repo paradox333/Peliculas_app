@@ -16,7 +16,7 @@ class DetailsScreen extends StatelessWidget {
         slivers: [
           _CustomAppBar(
             titleBar: movie.title,
-            imagePathBar: movie.fullPosterImg,
+            imagePathBar: movie.fullBackGroundPath,
             
             ),
           SliverList(
@@ -28,7 +28,7 @@ class DetailsScreen extends StatelessWidget {
                 imagePath: movie.fullPosterImg,
                 ),
               _Overview(details: movie.overview),
-              CastingCards() 
+              CastingCards(movie.id) 
             ]),
           )
       
@@ -58,10 +58,12 @@ class _CustomAppBar extends StatelessWidget {
           width: double.infinity,
           alignment: Alignment.bottomCenter,
           color: Colors.black45,
-          padding: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
           child: Text(
             titleBar,
-            style: TextStyle( fontSize: 16),),
+            style: TextStyle( fontSize: 16),
+            textAlign: TextAlign.center,
+            ),
         ),
         background: FadeInImage(
           placeholder: AssetImage('assets/loading.gif'),
@@ -86,6 +88,7 @@ class _PosterAndTitle extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
 
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -98,6 +101,7 @@ class _PosterAndTitle extends StatelessWidget {
               placeholder: AssetImage('assets/no-image.jpg'),
               image: NetworkImage(imagePath),
               height: 150,
+              width: 100,
             ),
           ),
           SizedBox(width: 20,),
@@ -105,8 +109,13 @@ class _PosterAndTitle extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: textTheme.headline5, overflow: TextOverflow.ellipsis, maxLines: 2,),
-              Text(originalTitle, style: textTheme.subtitle1, overflow: TextOverflow.ellipsis),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth:  size.width * 0.6),
+                child: Text(title, style: textTheme.headline5, overflow: TextOverflow.ellipsis, maxLines: 2,),
+                ),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.4),
+                child: Text(originalTitle, style: textTheme.subtitle1, overflow: TextOverflow.ellipsis, maxLines: 2,)),
 
               Row(
                 children: [
@@ -137,7 +146,8 @@ class _Overview extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Text(details,
       textAlign: TextAlign.justify,
-      style: Theme.of(context).textTheme.subtitle1
+      style: Theme.of(context).textTheme.subtitle1,
+      
       )
 
     );
