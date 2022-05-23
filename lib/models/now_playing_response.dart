@@ -21,10 +21,10 @@ class NowPlayingResponse {
     factory NowPlayingResponse.fromJson(String str) => NowPlayingResponse.fromMap(json.decode(str));
 
     factory NowPlayingResponse.fromMap(Map<String, dynamic> json) => NowPlayingResponse(
-        dates: Dates.fromMap(json["dates"]),
-        page: json["page"],
-        results: List<Movie>.from(json["results"].map((x) => Movie.fromMap(x))),
-        totalPages: json["total_pages"],
+        dates       : Dates.fromMap(json["dates"]),
+        page        : json["page"],
+        results     : List<Movie>.from(json["results"].map((x) => Movie.fromMap(x))),
+        totalPages  : json["total_pages"],
         totalResults: json["total_results"],
     );
 }

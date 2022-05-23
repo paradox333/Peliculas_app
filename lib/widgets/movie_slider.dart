@@ -1,7 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas_app_2/models/models.dart';
+import 'package:peliculas_app_2/providers/movies_provider.dart';
 
-class MoveSlider extends StatelessWidget {
-  const MoveSlider({ Key? key }) : super(key: key);
+class MoveSlider extends StatefulWidget {
+  const MoveSlider({ Key? key, required this.movies, this.title, required this.onNextPage, }) : super(key: key);
+
+  final List<Movie> movies;
+  final String? title;
+  final Function onNextPage;
+
+  @override
+  State<MoveSlider> createState() => _MoveSliderState();
+}
+
+class _MoveSliderState extends State<MoveSlider> {
+
+final ScrollController scrollController = new ScrollController();
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    scrollController.addListener(() {
+      
+      if(scrollController.position.pixels >= scrollController.position.maxScrollExtent - 500){
+      widget.onNextPage();
+      }
+
+    });
+  }
+
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +45,19 @@ class MoveSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Populares', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-            ),
+          if(this.widget.title != null)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(this.widget.title!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ),
+            
           SizedBox(height: 5,),
           Expanded(
             child: ListView.builder(
+              controller: scrollController,
               scrollDirection: Axis.horizontal,
-              itemCount: 20,
-              itemBuilder: (_, int index) => _MoviePoster()                
+              itemCount: widget.movies.length,
+              itemBuilder: (_, int index) => _MoviePoster( widget.movies[index],)                
               ),
           )           
           
@@ -31,7 +68,10 @@ class MoveSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({ Key? key }) : super(key: key);
+
+const _MoviePoster(this.movie);
+
+final Movie movie;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +83,12 @@ class _MoviePoster extends StatelessWidget {
         children: [
 
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'details', arguments: 'movie-instance'),
+            onTap: () => Navigator.pushNamed(context, 'details', arguments: movie ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(
                 placeholder: AssetImage('assets/no-image.jpg'), 
-                image: NetworkImage('https://via.placeholder.com/300x400'),
+                image: NetworkImage(movie.fullPosterImg),
                 width: 130,
                 height: 190,
                 fit: BoxFit.cover,
@@ -58,7 +98,7 @@ class _MoviePoster extends StatelessWidget {
 
           SizedBox(height: 5),
 
-          Text('StartWars: El retorno del Jedi',
+          Text(movie.title,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           )
