@@ -7,3 +7,4 @@ export 'package:peliculas_app_2/models/populard_response.dart';
 
 export 'package:peliculas_app_2/models/credits_response.dart';
 
+export 'package:peliculas_app_2/models/search_response.dart';

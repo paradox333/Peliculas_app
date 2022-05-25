@@ -3,15 +3,15 @@ import 'dart:convert';
 class Movie {
     Movie({
         required this.adult,
-        required this.backdropPath,
+        this.backdropPath,
         required this.genreIds,
         required this.id,
         required this.originalLanguage,
         required this.originalTitle,
         required this.overview,
         required this.popularity,
-        required this.posterPath,
-        required this.releaseDate,
+        this.posterPath,
+        this.releaseDate,
         required this.title,
         required this.video,
         required this.voteAverage,
@@ -19,7 +19,7 @@ class Movie {
     });
 
     bool adult;
-    String backdropPath;
+    String? backdropPath;
     List<int> genreIds;
     int id;
     String originalLanguage;
@@ -32,6 +32,8 @@ class Movie {
     bool video;
     double voteAverage;
     int voteCount;
+
+    String? heroId;
 
     get fullPosterImg{
       if( posterPath != null ) return 'https://image.tmdb.org/t/p/w500$posterPath';
